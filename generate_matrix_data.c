@@ -2,6 +2,16 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+#include <sys/time.h>
+
+long long current_timestamp() {
+    struct timeval te; 
+    gettimeofday(&te, NULL); // get current time
+    unsigned long time_in_micros = 1000000 * te.tv_sec + te.tv_usec; // caculate microseconds
+    // printf("milliseconds: %lld\n", milliseconds);
+    return time_in_micros;
+}
+
 int main(){
     // Allocate aligned memory here.
     void* mem_ptr = malloc(sizeof(float)*256*256 + 15);
@@ -20,6 +30,8 @@ int main(){
 
     float output_data_ptr[254*254];
 
+
+    long long int begin = current_timestamp();
     // f_mm_c(input_data_ptr, conv_kernel, output_data_ptr);
     for(int i = 0; i < 254; i++){
         for(int j = 0; j < 254; j++){
@@ -34,10 +46,13 @@ int main(){
            output_data_ptr[i*254 + j] += input_data_ptr[(i+2)*256 + j + 2] * conv_kernel[8];
         }
     }
+    long long int end = current_timestamp();
+
+    printf("Time spend for convolution operation is: %llu microseconds\n", end - begin);
     
-    for(register int i = 0; i < 254*254; ++i){
-        printf("%d: %f\n", i, output_data_ptr[i]);
-    }
+//    for(register int i = 0; i < 254*254; ++i){
+//        printf("%d: %f\n", i, output_data_ptr[i]);
+//    }
 
 
     // Free allocated memory here.
