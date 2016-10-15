@@ -53,6 +53,9 @@ int main(){
 //    for(register int i = 0; i < 254*254; ++i){
 //        printf("%d: %f\n", i, output_data_ptr[i]);
 //    }
+    for(register int i = 0; i < 254*254; i++){
+      output_data_ptr[i] = 0.0f;
+    }
 
     void* mem_inter_ptr = malloc(sizeof(float)*254*254*9 + 15);
     float* inter_data_ptr = (float*)(((uintptr_t)mem_inter_ptr + 15) & ~ (uintptr_t)0x0F);
@@ -72,18 +75,16 @@ int main(){
         inter_data_ptr[i*254*9 + j*9 + 8] = input_data_ptr[(i+2)*256 + j + 2];        
       }
     }
-    for(register int i = 0; i < 254; i++){
-      for(int j = 0; j < 254; j++){
-        output_data_ptr[i*254] = inter_data_ptr[i*9] * conv_kernel[0];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 1] * conv_kernel[1];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 2] * conv_kernel[2];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 3] * conv_kernel[3];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 4] * conv_kernel[4];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 5] * conv_kernel[5];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 6] * conv_kernel[6];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 7] * conv_kernel[7];
-        output_data_ptr[i*254] += inter_data_ptr[i*9 + 8] * conv_kernel[8];
-      }
+    for(register int i = 0; i < 254*254; i++){
+      output_data_ptr[i] = inter_data_ptr[i*9] * conv_kernel[0];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 1] * conv_kernel[1];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 2] * conv_kernel[2];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 3] * conv_kernel[3];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 4] * conv_kernel[4];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 5] * conv_kernel[5];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 6] * conv_kernel[6];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 7] * conv_kernel[7];
+      output_data_ptr[i] += inter_data_ptr[i*9 + 8] * conv_kernel[8];
     }
     end = current_timestamp();
     printf("Time spend for gemm convolution operation is: %llu microseconds\n", end - begin);
