@@ -25,4 +25,5 @@ Open your terminal.
 cd /to/your/workspace
 git clone https://github.com/yeephycho/Fast_Spatial_Convolution.git
 make
+./fastMatrixMultiplication
 ```
