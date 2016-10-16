@@ -4,6 +4,12 @@
 
 #include <sys/time.h>
 
+#define MATRIX_WIDTH 256
+#define MATRIX_HEIGHT 256
+
+
+
+
 long long current_timestamp() {
     struct timeval te; 
     gettimeofday(&te, NULL); // get current time
