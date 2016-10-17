@@ -7,8 +7,9 @@
 #define MATRIX_WIDTH 256
 #define MATRIX_HEIGHT 256
 
-
-
+//#ifdef CBLAS
+#include <cblas.h>
+//#endif
 
 long long current_timestamp() {
     struct timeval te; 
@@ -23,6 +24,31 @@ int main(){
     void* mem_ptr = malloc(sizeof(float)*256*256 + 15);
     float* input_data_ptr = (float*)(((uintptr_t)mem_ptr + 15) & ~ (uintptr_t)0x0F);
     printf("Matrix started at address: %p, this address divides 16 is: %lu\n", input_data_ptr, (size_t)input_data_ptr / 16);
+
+    // OpenBLAS implementation
+    //const enum CBLAS_ORDER Order=CblasRowMajor;
+    //const enum CBLAS_TRANSPORSE TransA=CblasNoTrans;
+    //const enum CBLAS_TRANSPOSE TransB=CblasNoTrans;
+    const int M = 4;
+    const int N = 2;
+    const int K = 3;
+    const float alpha = 1;
+    const float beta = 0;
+    const int lda = K;
+    const int ldb = N;
+    const int ldc = N;
+    static float A[3 * 4] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6};
+    static float B[3 * 2] = {5, 4, 3, 2, 1, 0};
+    float C[4 * 2];
+
+    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, M, N, K, alpha, A, lda, B, ldb, beta, C, ldc);
+
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            printf("%f ",C[i * N + j]);
+        }
+        printf("\n");
+    }
 
     // Data initialization here,
     for(register int i = 0; i < 256*256; ++i){
