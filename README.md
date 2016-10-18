@@ -24,6 +24,7 @@ Open your terminal.
 ``` bash
 cd /to/your/workspace
 git clone https://github.com/yeephycho/Fast_Spatial_Convolution.git
+cd src
 make
 ./fastMatrixMultiplication
 ```
