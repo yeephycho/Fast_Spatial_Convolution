@@ -2,7 +2,16 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+#ifdef __APPLE__
+  #include <sys/malloc.h>
+#elif linux
+  #include <malloc.h>
+#else
+  #include <malloc.h>
+#endif // #ifdef macintosh
+
 #include "profiling.h"
+#include "Alloc_Mem.h"
 
 #define MATRIX_WIDTH 256
 #define MATRIX_HEIGHT 256
@@ -17,11 +26,17 @@ int main(){
 //    float* input_data_ptr = (float*)(((uintptr_t)mem_ptr + 15) & ~ (uintptr_t)0x0F);
 //    printf("Matrix started at address: %p, this address divides 16 is: %lu\n", input_data_ptr, (size_t)input_data_ptr / 16);
     
-    void* ptr;
-    int rc = posix_memalign(&ptr, 64, sizeof(float)*256*256);
-    printf("Return value of posix_memalign is :%d\n", rc);
-    float* input_data_ptr = ptr;
+//    void* ptr;
+//    int rc = posix_memalign(&ptr, 64, sizeof(float)*256*256);
+//    printf("Return value of posix_memalign is :%d\n", rc);
+//    float* input_data_ptr = ptr;
+    int rc;
+    float* input_data_ptr = valloc(sizeof(float)*256*256);
 
+//    void* ptr;
+//    int rc = alloc_aligned_mem(ptr, 64, sizeof(float)*256*256);
+//    printf("Return value of posix_memalign is :%d\n", rc);
+//    float* input_data_ptr = ptr;
 /*
     // OpenBLAS implementation
     //const enum CBLAS_ORDER Order=CblasRowMajor;
@@ -52,7 +67,7 @@ int main(){
     // Data initialization here,
     for(register int i = 0; i < 256*256; ++i){
         input_data_ptr[i] = 1.0f;
-    //    printf("%d: %f\n", i, input_data_ptr[i]);
+ //       printf("%d: %f\n", i, input_data_ptr[i]);
     }
 
     float conv_kernel[9] = {3.0f, 3.0f, 3.0f,
@@ -130,7 +145,7 @@ int main(){
     // Free allocated memory here.
     free(input_data_ptr);
     input_data_ptr = NULL;
-    ptr = NULL;
+//    ptr = NULL;
     free(mem_inter_ptr);
     mem_inter_ptr = NULL;
     inter_data_ptr = NULL;
