@@ -32,7 +32,8 @@ int main(){
 //    float* input_data_ptr = ptr;
     int rc;
     float* input_data_ptr = valloc(sizeof(float)*256*256);
-
+//    float* ptr = aligned_alloc(64, sizeof(float)*256*256);
+//    free(ptr);
 //    void* ptr;
 //    int rc = alloc_aligned_mem(ptr, 64, sizeof(float)*256*256);
 //    printf("Return value of posix_memalign is :%d\n", rc);
@@ -67,7 +68,7 @@ int main(){
     // Data initialization here,
     for(register int i = 0; i < 256*256; ++i){
         input_data_ptr[i] = 1.0f;
- //       printf("%d: %f\n", i, input_data_ptr[i]);
+//        printf("%d: %f\n", i, input_data_ptr[i]);
     }
 
     float conv_kernel[9] = {3.0f, 3.0f, 3.0f,
@@ -76,7 +77,7 @@ int main(){
 
     float output_data_ptr[254*254];
 
-    long long int begin = timestamp_in_milliseconds();
+    long long int begin = timestamp_in_nanoseconds();
     for(int i = 0; i < 254; i++){
         for(int j = 0; j < 254; j++){
            output_data_ptr[i*254 + j] = input_data_ptr[i*256 + j] * conv_kernel[0];
@@ -90,9 +91,9 @@ int main(){
            output_data_ptr[i*254 + j] += input_data_ptr[(i+2)*256 + j + 2] * conv_kernel[8];
         }
     }
-    long long int end = timestamp_in_milliseconds();
+    long long int end = timestamp_in_nanoseconds();
 
-    printf("Time spend for convolution operation is: %llu microseconds\n", end - begin);
+    printf("Time spend for convolution operation is: %llu nanoseconds\n", end - begin);
     
 //    for(register int i = 0; i < 254*254; ++i){
 //        printf("%d: %f\n", i, output_data_ptr[i]);
