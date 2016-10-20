@@ -6,6 +6,6 @@
 #include <time.h>
 
 long long timestamp_in_milliseconds();
-long long timestamp_in_nanoseconds();
+//long long timestamp_in_nanoseconds();
 
 #endif

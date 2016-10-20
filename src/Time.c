@@ -1,7 +1,4 @@
-#define _POSIX_C_SOURCE 200112L
-#include "profiling.h"
-#include <time.h>
-
+#include "Time.h"
 
 long long timestamp_in_milliseconds() {
     struct timeval te; 
@@ -10,9 +7,11 @@ long long timestamp_in_milliseconds() {
     return time_in_micros;
 }
 
+/*
 long long timestamp_in_nanoseconds(){
     struct timespec t;
     clock_gettime(CLOCK_REALTIME, &t);
     long long ct = t.tv_sec * 10^9 + t.tv_nsec;
     return ct;
 }
+*/
