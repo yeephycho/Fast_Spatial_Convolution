@@ -1,4 +1,5 @@
 #include "profiling.h"
+#include <stdlib.h>
 
 long long timestamp_in_milliseconds() {
     struct timeval te; 

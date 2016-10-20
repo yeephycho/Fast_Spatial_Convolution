@@ -15,4 +15,4 @@ exec :
 
 .PHONY : clean
 clean :
-	-rm fastMatrixMultiplication profiling.o
+	-rm fastMatrixMultiplication profiling.o Alloc_Mem.o
