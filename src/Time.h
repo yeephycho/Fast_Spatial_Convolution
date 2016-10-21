@@ -1,5 +1,5 @@
-#ifndef _PROFILING_H_
-#define _PROFILING_H_
+#ifndef _TIME_H_
+#define _TIME_H_
 
 #include <sys/time.h>
 #include <stdlib.h>
@@ -8,4 +8,4 @@
 long long timestamp_in_milliseconds();
 //long long timestamp_in_nanoseconds();
 
-#endif
+#endif	//	#ifndef _TIME_H_
