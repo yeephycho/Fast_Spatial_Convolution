@@ -14,7 +14,7 @@
 #define FEATURE_WIDTH (MATRIX_WIDTH - KERNEL_WIDTH + 1)
 #define FEATURE_HEIGHT (MATRIX_HEIGHT - KERNEL_HEIGHT + 1)
 #define FEATURE_CHANNEL 1
-#define FEATURE_DEPTH 64
+#define FEATURE_DEPTH KERNEL_DEPTH
 
 
 int spatial_convolution_float32(float* input_ptr, float* kernel_ptr, float* output_ptr){
@@ -33,5 +33,44 @@ int spatial_convolution_float32(float* input_ptr, float* kernel_ptr, float* outp
 			}
 		}
 	}
+	return 0;
+};
+
+int spatial_convolution_float32_mm(float* input_ptr, float* kernel_ptr, float* output_ptr){
+	size_t cache_buffer_size = FEATURE_HEIGHT * FEATURE_WIDTH * FEATURE_CHANNEL * KERNEL_WIDTH * KERNEL_WIDTH * KERNEL_CHANNEL;
+    float* cache_data_ptr = alloc_aligned_float32_buffer(64, cache_buffer_size, 0.0f);
+    int count = 0;
+	for(int h = 0; h < FEATURE_HEIGHT; h++){
+		for(int w = 0; w < FEATURE_WIDTH; w++){
+			for(int c = 0; c < MATRIX_CHANNEL; c++){
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 0) * MATRIX_WIDTH + w + 0];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 0) * MATRIX_WIDTH + w + 1];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 0) * MATRIX_WIDTH + w + 2];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 1) * MATRIX_WIDTH + w + 0];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 1) * MATRIX_WIDTH + w + 1];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 1) * MATRIX_WIDTH + w + 2];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 2) * MATRIX_WIDTH + w + 0];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 2) * MATRIX_WIDTH + w + 1];
+				cache_data_ptr[count++] = input_ptr[c * MATRIX_WIDTH * MATRIX_HEIGHT + (h + 2) * MATRIX_WIDTH + w + 2];
+			}
+		}
+	}
+
+	for(register int i = 0; i < FEATURE_WIDTH * FEATURE_HEIGHT; i++){
+		for(register int c = 0; c < KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL; c+=9){
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 0] * kernel_ptr[c + 0];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 1] * kernel_ptr[c + 1];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 2] * kernel_ptr[c + 2];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 3] * kernel_ptr[c + 3];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 4] * kernel_ptr[c + 4];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 5] * kernel_ptr[c + 5];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 6] * kernel_ptr[c + 6];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 7] * kernel_ptr[c + 7];
+			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 8] * kernel_ptr[c + 8];
+		}
+	}
+
+	free(cache_data_ptr);
+	cache_data_ptr = NULL;
 	return 0;
 };

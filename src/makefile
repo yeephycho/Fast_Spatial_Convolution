@@ -8,12 +8,12 @@ Time.o : Time.h Time.c
 	gcc -std=c11 -Ofast -c Time.c
 
 
+Spatial_Convolution.o : Spatial_Convolution.h Spatial_Convolution.c Mem_Alloc.o
+	gcc -std=c11 -Ofast -c Spatial_Convolution.c
+
+
 Alloc_Mem.o : Mem_Alloc.h Mem_Alloc.c
 	gcc -std=c11 -Ofast -c Mem_Alloc.c
-
-
-Spatial_Convolution.o : Spatial_Convolution.h Spatial_Convolution.c
-	gcc -std=c11 -Ofast -c Spatial_Convolution.c
 
 
 .PHONY : exec
