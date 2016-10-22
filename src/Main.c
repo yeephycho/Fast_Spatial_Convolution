@@ -9,11 +9,6 @@
 #include "Global_Setting.h"
 
 
-#ifdef CBLAS
-    #include <cblas.h>
-#endif  // #ifdef CBLAS
-
-
 #define MATRIX_WIDTH 256
 #define MATRIX_HEIGHT 256
 #define MATRIX_CHANNEL 32

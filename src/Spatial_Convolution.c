@@ -37,8 +37,13 @@ int spatial_convolution_float32(float* input_ptr, float* kernel_ptr, float* outp
 };
 
 int spatial_convolution_float32_mm(float* input_ptr, float* kernel_ptr, float* output_ptr){
-	size_t cache_buffer_size = FEATURE_HEIGHT * FEATURE_WIDTH * FEATURE_CHANNEL * KERNEL_WIDTH * KERNEL_WIDTH * KERNEL_CHANNEL;
+//	long long int t1 = timestamp_in_milliseconds();
+
+	size_t cache_buffer_size = FEATURE_WIDTH * FEATURE_HEIGHT * FEATURE_CHANNEL * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL;
     float* cache_data_ptr = alloc_aligned_float32_buffer(64, cache_buffer_size, 0.0f);
+
+//    long long int t2 = timestamp_in_milliseconds();
+
     int count = 0;
 	for(int h = 0; h < FEATURE_HEIGHT; h++){
 		for(int w = 0; w < FEATURE_WIDTH; w++){
@@ -56,6 +61,8 @@ int spatial_convolution_float32_mm(float* input_ptr, float* kernel_ptr, float* o
 		}
 	}
 
+//	long long int t3 = timestamp_in_milliseconds();
+
 	for(register int i = 0; i < FEATURE_WIDTH * FEATURE_HEIGHT; i++){
 		for(register int c = 0; c < KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL; c+=9){
 			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 0] * kernel_ptr[c + 0];
@@ -69,6 +76,12 @@ int spatial_convolution_float32_mm(float* input_ptr, float* kernel_ptr, float* o
 			output_ptr[i] += cache_data_ptr[i * KERNEL_WIDTH * KERNEL_HEIGHT * KERNEL_CHANNEL + c + 8] * kernel_ptr[c + 8];
 		}
 	}
+
+//	long long int t4 = timestamp_in_milliseconds();
+
+//	printf("Memory Allocation takes: %llu\n", t2 - t1);
+//	printf("Memory Arrange takes: %llu\n", t3 - t2);
+//	printf("Multiplication takes: %llu\n", t4 - t3);
 
 	free(cache_data_ptr);
 	cache_data_ptr = NULL;
