@@ -1,7 +1,6 @@
 #include <assert.h>
 #include "Mem_Alloc.h"
 
-
 /****************************************
 	These function allocate aligned memory buffer to store input, kernel or output data.
 	alignment: Must be 2 to the power of N, N should be an integer.

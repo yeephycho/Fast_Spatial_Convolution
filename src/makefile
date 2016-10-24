@@ -1,19 +1,19 @@
-
+CFLAGS = -std=c11 -Ofast
 fastMatrixMultiplication : Main.c Time.o Mem_Alloc.o Spatial_Convolution.o
-	gcc -std=c11 -Ofast Main.c Time.o Mem_Alloc.o Spatial_Convolution.o -o fastMatrixMultiplication
+	gcc $(CFLAGS) Main.c Time.o Mem_Alloc.o Spatial_Convolution.o -o fastMatrixMultiplication
 #	gcc generate_matrix_data.c -lopenblas -o fastMatrixMultiplication -std=c11 -Ofast
 
 
 Time.o : Time.h Time.c
-	gcc -std=c11 -Ofast -c Time.c
+	gcc $(CFLAGS) -c Time.c
 
 
 Spatial_Convolution.o : Spatial_Convolution.h Spatial_Convolution.c Mem_Alloc.o
-	gcc -std=c11 -Ofast -c Spatial_Convolution.c
+	gcc $(CFLAGS) -c Spatial_Convolution.c
 
 
 Alloc_Mem.o : Mem_Alloc.h Mem_Alloc.c
-	gcc -std=c11 -Ofast -c Mem_Alloc.c
+	gcc $(CFLAGS) -c Mem_Alloc.c
 
 
 .PHONY : exec

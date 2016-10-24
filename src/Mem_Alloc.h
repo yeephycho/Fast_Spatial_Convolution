@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <malloc.h>
 
 #ifdef __APPLE__
     #include <sys/malloc.h>
