@@ -2,27 +2,10 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
-
 #include "Time.h"
 #include "Mem_Alloc.h"
 #include "Spatial_Convolution.h"
 #include "Global_Setting.h"
-
-
-#define MATRIX_WIDTH 256
-#define MATRIX_HEIGHT 256
-#define MATRIX_CHANNEL 32
-#define MATRIX_DEPTH 1
-
-#define KERNEL_WIDTH 3
-#define KERNEL_HEIGHT 3
-#define KERNEL_CHANNEL MATRIX_CHANNEL
-#define KERNEL_DEPTH 64
-
-#define FEATURE_WIDTH (MATRIX_WIDTH - KERNEL_WIDTH + 1)
-#define FEATURE_HEIGHT (MATRIX_HEIGHT - KERNEL_HEIGHT + 1)
-#define FEATURE_CHANNEL 1
-#define FEATURE_DEPTH 64
 
 
 int main(int argc, char** argv){

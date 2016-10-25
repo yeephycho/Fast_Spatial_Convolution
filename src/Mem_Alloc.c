@@ -1,5 +1,5 @@
-#include <assert.h>
 #include "Mem_Alloc.h"
+
 
 /****************************************
 	These function allocate aligned memory buffer to store input, kernel or output data.
