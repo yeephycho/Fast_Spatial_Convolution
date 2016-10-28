@@ -9,7 +9,7 @@ Time.o : Time.h Time.c
 
 
 Spatial_Convolution.o : Spatial_Convolution.h Spatial_Convolution.c Mem_Alloc.o Global_Setting.h
-	gcc $(CFLAGS) -c Spatial_Convolution.c
+	gcc $(CFLAGS) -lblas -c Spatial_Convolution.c
 
 
 Alloc_Mem.o : Mem_Alloc.h Mem_Alloc.c
