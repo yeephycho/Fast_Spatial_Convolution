@@ -1,11 +1,18 @@
-#define MATRIX_WIDTH 1024
-#define MATRIX_HEIGHT 1024
 
+#define MATRIX_WIDTH 128 
+#define MATRIX_HEIGHT 128
+#define MATRIX_CHANNEL 1
+#define MATRIX_DEPTH 1
+    
 #define KERNEL_WIDTH 3
 #define KERNEL_HEIGHT 3
+#define KERNEL_CHANNEL MATRIX_CHANNEL
+#define KERNEL_DEPTH 64
 
 #define FEATURE_WIDTH (MATRIX_WIDTH - KERNEL_WIDTH + 1)
-#define	FEATURE_HEIGHT (MATRIX_HEIGHT - KERNEL_HEIGHT + 1)
+#define FEATURE_HEIGHT (MATRIX_HEIGHT - KERNEL_HEIGHT + 1)
+#define FEATURE_CHANNEL 1
+#define FEATURE_DEPTH 64
 
 __kernel void cl_spatial_convolution(
     __global float *input_data, 
